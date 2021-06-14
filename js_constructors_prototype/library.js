@@ -8,7 +8,7 @@ class Library {
     }
     findByTitle(name) {
         for (const item of this.bookList) {
-            if (item.title === name) {
+            if (item.title.toLowerCase().includes(name.toLowerCase())) {
                 return item;
             }
         }
