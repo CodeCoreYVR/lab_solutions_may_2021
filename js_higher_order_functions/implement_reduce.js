@@ -1,7 +1,7 @@
 const reduce = function (arr, fn, initial) {
     let result = initial;
     for (let i = 0; i < arr.length; i++) {
-        result = fn(result, arr[i], i, arr);
+        result = fn(result, arr[i]);
     }
     return result;
 };
