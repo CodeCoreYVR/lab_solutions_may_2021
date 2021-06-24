@@ -2,11 +2,14 @@ const express = require('express');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const tasksRouter = require('./routes/tasks');
+const path = require('path');
+
 const app = express();
 
 
 app.use(logger('dev'));
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.urlencoded({ extended: false }));
 
