@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const tasksRouter = require('./routes/tasks');
+const userRouter = require('./routes/user')
 const path = require('path');
 
 const app = express();
@@ -14,6 +15,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
+
+app.use((request, response, next) => {
+    response.locals.userName = '';
+    const userName = request.cookies.userName;
+    if (userName) {
+        response.locals.userName = userName;
+    }
+    next();
+});
 
 app.get('/', function (request, response) {
     const language = request.cookies.language;
@@ -45,6 +55,7 @@ app.get('/preferred_language', function (request, response) {
     });
 });
 
+
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 7;
 app.post('/preferred_language', function (request, response) {
     const name = request.body.name;
@@ -58,9 +69,9 @@ app.post('/preferred_language', function (request, response) {
     response.redirect('/');
 });
 
-
 // Custom middleware
 app.use((request, response, next) => {
+    response.locals.userName = '';
     const todoList = request.cookies.todoList;
     response.locals.todoList = [];
     if (todoList) {
@@ -75,7 +86,9 @@ app.use((request, response, next) => {
 });
 
 
+
 app.use(tasksRouter);
+app.use(userRouter)
 const PORT = 5000;
 const DOMAIN = 'localhost';
 app.listen(PORT, DOMAIN, function () {
