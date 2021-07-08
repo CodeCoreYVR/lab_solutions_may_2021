@@ -8,7 +8,7 @@
 
 Product.destroy_all
 
-1000.times do
+50.times do
     created_time = Faker::Date.between(from: '2000-09-23', to: '2030-09-25')
     Product.create(
         title: Faker::FunnyName.name,

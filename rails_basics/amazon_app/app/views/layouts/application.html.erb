@@ -12,11 +12,14 @@
   <body>
     <nav>
         <a href="/">Home</a>
-
+        |
         <a href="/about">About</a>
-
+        |
         <a href="/contact">Contact</a>
-
+        |
+        <%= link_to "Products", products_path %>
+        |
+        <%= link_to "New Product", new_product_path %>
     </nav>
     <%= yield %>
   </body>
