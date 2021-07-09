@@ -10,14 +10,22 @@ Product.destroy_all
 
 50.times do
     created_time = Faker::Date.between(from: '2000-09-23', to: '2030-09-25')
-    Product.create(
+    p = Product.create(
         title: Faker::FunnyName.name,
         description: Faker::Restaurant.name,
         created_at: created_time,
         updated_at: created_time
     )
+    if p.valid?
+        p.reviews = rand(1..3).times.map do
+            Review.new(body: Faker::Address.street_address,rating:rand(1..5))
+        end
+    end
 end
 
-list = Product.all
+products = Product.all
+reivews = Review.all
 
-puts list.count
+
+puts products.count
+puts reivews.count

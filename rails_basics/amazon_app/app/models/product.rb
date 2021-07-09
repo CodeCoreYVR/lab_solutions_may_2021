@@ -10,6 +10,9 @@ class Product < ApplicationRecord
     validates :price, numericality:{greater_than: 0}
     validates :description, presence: true, length: { minimum: 10 }
 
+
+    has_many :reviews, dependent: :destroy
+
     # A callback method to set the default price to 1
     # A callback method to capitalize the product title before saving
     private

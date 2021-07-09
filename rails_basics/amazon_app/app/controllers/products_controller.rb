@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-
+    before_action :find_product, only: [:edit, :update, :show, :destory]
     
     def index
         @products = Product.all
@@ -19,21 +19,25 @@ class ProductsController < ApplicationController
     end
     
     def show
-        @product = Product.find(params[:id])
+
+        #Lab for rails One to Many
+        @review = Review.new
+
+        @reviews = @product.reviews
     end
     
     def destroy
-        @product = Product.find(params[:id])
+        
         @product.destroy
         redirect_to products_path
     end
 
     def edit
-        @product = Product.find(params[:id])
+        
     end
 
     def update
-        @product =  Product.find(params[:id])
+        
         if @product.update product_params
             redirect_to product_path(@product.id)
         else
@@ -46,6 +50,10 @@ class ProductsController < ApplicationController
     private
     def product_params
         params.require(:product).permit(:title,:description,:price)
+    end
+    
+    def find_product
+        @product =  Product.find(params[:id])
     end
     
 end

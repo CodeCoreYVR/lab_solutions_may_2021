@@ -4,9 +4,50 @@
 <div>
 
 <small>
-    <%= link_to("Delete", product_path ,method: :delete, data:{confirm:"Are you sure?"}) %>
+    <%= link_to("Delete", product_path(@product) ,method: :delete, data:{confirm:"Are you sure?"}) %>
 </small>
 <small>
     <%= link_to("Edit", edit_product_path(@product.id)) %>
 </small>
 </div>
+
+
+<h3>
+    Put a review here
+</h3>
+<% if @review.errors.any? %>
+  <ul>
+    <% @review.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+<% end %>
+<%= form_with model:[@product,@review], local: true do |form|%>
+<div>
+    <%= form.label :body%>
+    <%= form.text_area :body%>
+</div>
+<div>
+    <%= form.label :rating%>
+    <%= form.text_field :rating%>
+</div>
+<div>
+    <%= form.submit%>
+</div>
+
+<% end %>
+
+
+<ul>
+<% @reviews.each do |review|%>
+    <li>
+    <small>rating:  <%= review.rating%></small>
+    <br />
+    <%= review.body%>
+    <br />
+    <small>
+    <%= link_to("Delete", product_review_path(@product, review) ,method: :delete, data:{confirm:"Are you sure?"}) %>
+    </small>
+    </li>
+<% end %>
+</ul>
