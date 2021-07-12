@@ -12,7 +12,7 @@ class Product < ApplicationRecord
 
 
     has_many :reviews, dependent: :destroy
-
+    belongs_to :user, optional: true
     # A callback method to set the default price to 1
     # A callback method to capitalize the product title before saving
     private

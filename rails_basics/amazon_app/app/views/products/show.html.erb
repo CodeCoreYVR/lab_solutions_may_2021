@@ -1,6 +1,10 @@
 <h1><%= @product.title%> </h1>
 <p><%= @product.description%></p>
 <small>$<%= format("%.2f",@product.price)%></small>
+
+<h5>
+created by: <%= @product.user&.full_name%>
+</h5>
 <div>
 
 <small>
@@ -45,8 +49,11 @@
     <br />
     <%= review.body%>
     <br />
+    <h5>
+    created by: <%= review.user&.full_name%>
+    </h5>
     <small>
-    <%= link_to("Delete", product_review_path(@product, review) ,method: :delete, data:{confirm:"Are you sure?"}) %>
+    <%= link_to("Delete", product_review_path(@product.id, review) ,method: :delete, data:{confirm:"Are you sure?"}) %>
     </small>
     </li>
 <% end %>
