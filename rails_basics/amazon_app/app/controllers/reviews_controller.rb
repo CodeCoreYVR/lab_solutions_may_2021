@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+
     def create
         @product = Product.find params[:product_id]
         @review = Review.new review_params
@@ -15,8 +16,14 @@ class ReviewsController < ApplicationController
     def destroy
         @product = Product.find params[:product_id]
         @review = Review.find params[:id]
-        @review.destroy
-        redirect_to product_path(@product)
+        if can?(:crud,@review)
+            @review.destroy
+            flash[:success] = "Deleted"
+            redirect_to product_path(@product)
+        else
+            redirect_to root_path
+        end
+        
     end
     
 
@@ -24,5 +31,4 @@ class ReviewsController < ApplicationController
     def review_params
         params.require(:review).permit(:body,:rating)
     end
-    
 end

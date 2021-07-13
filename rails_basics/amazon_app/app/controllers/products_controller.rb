@@ -1,8 +1,10 @@
 class ProductsController < ApplicationController
     before_action :authenticate_user!, except: [:index, :show]
     
-    before_action :find_product, only: [:edit, :update, :show, :destory]
+    before_action :find_product, only: [:edit, :update, :show, :destroy]
     
+    before_action :authorize_user!, only: [:edit, :update, :destroy]
+
     def index
         @products = Product.all
     end
@@ -30,7 +32,6 @@ class ProductsController < ApplicationController
     end
     
     def destroy
-        
         @product.destroy
         redirect_to products_path
     end
@@ -59,4 +60,8 @@ class ProductsController < ApplicationController
         @product =  Product.find(params[:id])
     end
     
+    def authorize_user!
+        redirect_to root_path unless can?(:crud,@product)
+    end
+
 end

@@ -29,5 +29,6 @@ Rails.application.routes.draw do
 
   resource :session, only: [:new, :destroy, :create]
 
+  get("/dashboard",{to:"users#dashboard"})
 
 end
