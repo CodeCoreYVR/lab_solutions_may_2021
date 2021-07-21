@@ -29,6 +29,7 @@ class ProductsController < ApplicationController
         @review = Review.new
 
         @reviews = @product.reviews
+        @favourite = Favourite.find_by(product_id: @product, user_id: current_user)
     end
     
     def destroy

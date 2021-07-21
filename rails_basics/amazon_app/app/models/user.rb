@@ -17,4 +17,10 @@ class User < ApplicationRecord
 
     #Labs for testing authentication
     has_many :news_articles, dependent: :nullify
+    # lab for many to many
+    has_many :likes
+    has_many :liked_reviews, through: :likes, source: :review
+
+    has_many :favourites
+    has_many :favourited_products, through: :favourites, source: :product
 end

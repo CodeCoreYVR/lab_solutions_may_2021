@@ -21,7 +21,10 @@ Rails.application.routes.draw do
 
   # Labs for rails One to Many
   resources :products do
-    resources :reviews, only: [:create, :destroy]
+    resources :reviews do
+      resources :likes, shallow: true, only: [:create, :destroy]
+    end
+    resources :favourites, shallow: true, only: [:create, :destroy]
   end
 
   # Labs for rails Authentication
