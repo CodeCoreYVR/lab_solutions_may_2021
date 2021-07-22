@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_19_181948) do
+ActiveRecord::Schema.define(version: 2021_07_22_190006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,21 @@ ActiveRecord::Schema.define(version: 2021_07_19_181948) do
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_taggings_on_product_id"
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -81,6 +96,16 @@ ActiveRecord::Schema.define(version: 2021_07_19_181948) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "review_id", null: false
+    t.boolean "is_vote"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["review_id"], name: "index_votes_on_review_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+  end
+
   add_foreign_key "favourites", "products"
   add_foreign_key "favourites", "users"
   add_foreign_key "likes", "reviews"
@@ -89,4 +114,8 @@ ActiveRecord::Schema.define(version: 2021_07_19_181948) do
   add_foreign_key "products", "users"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"
+  add_foreign_key "taggings", "products"
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "votes", "reviews"
+  add_foreign_key "votes", "users"
 end

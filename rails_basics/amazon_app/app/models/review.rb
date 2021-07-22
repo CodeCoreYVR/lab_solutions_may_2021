@@ -5,4 +5,8 @@ class Review < ApplicationRecord
   # lab for many to many
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
+
+  # lab for more many to many
+  has_many :votes, dependent: :destroy
+  has_many :voters, through: :votes, source: :user
 end

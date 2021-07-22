@@ -18,6 +18,10 @@ class Product < ApplicationRecord
     has_many :favourites, dependent: :destroy
     has_many :favouriters, through: :favourites, source: :user
 
+    # lab for more many to many 
+    has_many :taggings, dependent: :destroy
+    has_many :tags, through: :taggings
+
     # A callback method to set the default price to 1
     # A callback method to capitalize the product title before saving
     private

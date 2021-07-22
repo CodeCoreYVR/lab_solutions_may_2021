@@ -9,9 +9,12 @@
 Product.destroy_all
 Review.destroy_all
 User.destroy_all
+Like.destroy_all
+Tag.destroy_all
 
 NUM_PRODUCTS = 50
 NUM_USERS = 5
+NUM_TAGS = 20
 PASSWORD = "123"
 
 super_user = User.create(
@@ -21,6 +24,14 @@ super_user = User.create(
     password: "123",
     is_admin: true
   )
+
+NUM_TAGS.times do
+  Tag.create(
+    name: Faker::ProgrammingLanguage.name
+  )
+end
+
+tags = Tag.all
 
 NUM_USERS.times do
   first_name = Faker::Name.first_name
@@ -54,14 +65,20 @@ NUM_PRODUCTS.times do
           user: users.sample,
           product: p
         )
+        if r.valid?
+          r.likers = users.shuffle.slice(0, rand(users.count))
+        end
       end
+      p.tags = tags.shuffle.slice(0, rand(tags.count / 2))
     end
   end
   
 products = Product.all
-reivews = Review.all
+reviews = Review.all
+likes = Like.all
 
-
-puts products.count
-puts reivews.count
-puts users.count
+puts Cowsay.say("Generated #{products.count} products", :frogs)
+puts Cowsay.say("Generated #{reviews.count} reviews", :stegosaurus)
+puts Cowsay.say("Generated #{users.count} users", :tux)
+puts Cowsay.say("Generated #{likes.count} likes", :cheese)
+puts Cowsay.say("Generated #{tags.count} tags", :kitty)
