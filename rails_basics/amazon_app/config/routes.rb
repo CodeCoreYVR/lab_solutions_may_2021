@@ -37,4 +37,11 @@ Rails.application.routes.draw do
   resources :tags,only: [:index]
   resources :news_articles
 
+  # labs for rails api
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :products
+      resource :session, only: [:create, :destroy]
+    end
+  end
 end
