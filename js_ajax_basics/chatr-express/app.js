@@ -6,7 +6,7 @@ const express = require("express");
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-
+displayRoutes = require('express-routemap');
 const home = require("./routes/home");
 const messages = require("./routes/messages");
 
@@ -19,7 +19,9 @@ app.set("view engine", "ejs");
 app.use(favicon(path.join(__dirname, "public", "favicon.png")));
 app.use(logger("dev"));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 // multer middleware is required to support `multipart/form-data`
 // which is used by any fetch request made with a `FormData` body
 app.use(multer().none());
@@ -42,7 +44,7 @@ app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
+  displayRoutes(app);
   // render the error page
   res.status(err.status || 500);
   res.render("error");
