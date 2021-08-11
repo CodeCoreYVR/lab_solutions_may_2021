@@ -1,92 +1,22 @@
 import React, { Component } from 'react';
-import NewProductForm from './NewProductForm';
-
+import { Link } from 'react-router-dom';
+import { Product } from "../requests";
+import Spinner from './Spinner'
 
 class ProductIndexPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: [
-                {
-                    "id": 117,
-                    "title": "Tophat jones",
-                    "price": 5,
-                    "seller": {
-                        "id": 33,
-                        "first_name": "Keanu",
-                        "last_name": "Murazik",
-                        "full_name": "Keanu Murazik"
-                    }
-                },
-                {
-                    "id": 177,
-                    "title": "Morty smith",
-                    "price": 6,
-                    "seller": {
-                        "id": 19,
-                        "first_name": "Ward",
-                        "last_name": "Cartwright",
-                        "full_name": "Ward Cartwright"
-                    }
-                },
-                {
-                    "id": 65,
-                    "title": "Beth's mytholog",
-                    "price": 8,
-                    "seller": {
-                        "id": 9,
-                        "first_name": "Neva",
-                        "last_name": "Trantow",
-                        "full_name": "Neva Trantow"
-                    }
-                },
-                {
-                    "id": 41,
-                    "title": "Snowball",
-                    "price": 3,
-                    "seller": {
-                        "id": 48,
-                        "first_name": "Isaac",
-                        "last_name": "Spinka",
-                        "full_name": "Isaac Spinka"
-                    }
-                },
-                {
-                    "id": 173,
-                    "title": "Jerry smith",
-                    "price": 5,
-                    "seller": {
-                        "id": 44,
-                        "first_name": "Anibal",
-                        "last_name": "Ondricka",
-                        "full_name": "Anibal Ondricka"
-                    }
-                },
-                {
-                    "id": 300,
-                    "title": "Beta vii",
-                    "price": 4,
-                    "seller": {
-                        "id": 12,
-                        "first_name": "Abbey",
-                        "last_name": "Watsica",
-                        "full_name": "Abbey Watsica"
-                    }
-                },
-                {
-                    "id": 301,
-                    "title": "Rick sanchez",
-                    "price": 10,
-                    "seller": {
-                        "id": 23,
-                        "first_name": "Gregoria",
-                        "last_name": "Koepp",
-                        "full_name": "Gregoria Koepp"
-                    }
-                }
-            ]
+            products: []
         };
         this.createProduct = this.createProduct.bind(this);
+    }
+    componentDidMount() {
+        Product.all().then(products => {
+            this.setState({
+                products: products
+            });
+        });
     }
     createProduct(params) {
         this.setState((state) => {
@@ -96,7 +26,7 @@ class ProductIndexPage extends Component {
                         ...params,
                         created_at: new Date(),
                         id: Math.max(...state.products.map((product) => product.id)) + 1,
-                        seller: { full_name: "Admin User" }
+                        seller: { full_name: "Mao" }
                     },
                     ...state.products
                 ]
@@ -104,10 +34,16 @@ class ProductIndexPage extends Component {
         });
     }
     deleteProduct(id) {
-        // id = 117 
-        this.setState({ products: this.state.products.filter((element) => element.id !== id) });
+        this.setState((state, props) => {
+            return {
+                products: state.products.filter((q) => q.id !== id)
+            };
+        });
     }
     render() {
+        if (!this.state.products) {
+            return <Spinner />;
+        }
         return (
             <main>
                 <h1>Products</h1>
@@ -115,8 +51,8 @@ class ProductIndexPage extends Component {
                     {this.state.products.map((product, index) => (
                         <li key={index}>
                             <p>
-                                <b>{product.title}</b>
-                                <button className="ui right floated red button" onClick={() => this.deleteProduct(product.id)} >
+                                <Link to={`/products/${product.id}`}>{product.title}</Link>
+                                <button onClick={() => this.deleteProduct(product.id)} >
                                     Delete
                                 </button>
                                 <br />
@@ -130,7 +66,6 @@ class ProductIndexPage extends Component {
                         </li>
                     ))}
                 </ul>
-                <NewProductForm onCreateProduct={this.createProduct} />
             </main>
         );
     }
