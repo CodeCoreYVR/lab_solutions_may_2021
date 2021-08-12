@@ -3,6 +3,14 @@ import { NavLink } from "react-router-dom";
 
 
 function Navbar(props) {
+    const { currentUser, onSignOut } = props;
+    const handleSignOutClick = event => {
+        event.preventDefault();
+
+        if (typeof onSignOut === "function") {
+            onSignOut();
+        }
+    };
     return (
         <nav
             style={{
@@ -11,9 +19,21 @@ function Navbar(props) {
                 padding: "10px 30px"
             }}
         >
-            <NavLink to="/">Home</NavLink>
             <NavLink to="/products">Products</NavLink>
-            <NavLink to="/products/new">Products New</NavLink>
+
+            {currentUser ? (
+                <>
+                    <span>Welcome {currentUser.first_name + ' ' + currentUser.last_name}</span>
+                    <a href="#sign_out" onClick={handleSignOutClick}>
+                        Sign Out
+                    </a>
+                    <NavLink to="/products/new">Publish a Product</NavLink>
+                </>
+            ) : (
+                <>
+                    <NavLink to="/sign_in">Sign In</NavLink>
+                </>
+            )}
         </nav>
     );
 }
