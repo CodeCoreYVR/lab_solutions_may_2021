@@ -10,7 +10,7 @@ import Spinner from "./components/Spinner";
 import SignInPage from './components/SignInPage'
 import { Session, User } from './requests'
 import AuthRoute from './components/AuthRoute'
-
+import NotFoundPage from './components/NotFoundPage'
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -78,6 +78,8 @@ class App extends React.Component {
               exact
               component={ProductShowPage}
             />
+            <Route component={NotFoundPage} />
+
           </Switch>
 
         </Router>

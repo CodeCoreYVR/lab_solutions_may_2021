@@ -10,7 +10,6 @@ class Product < ApplicationRecord
     validates :price, numericality:{greater_than: 0}
     validates :description, presence: true, length: { minimum: 10 }
 
-
     has_many :reviews, dependent: :destroy
     belongs_to :user, optional: true
 
