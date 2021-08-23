@@ -1,48 +1,45 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductDetails from './ProductDetails';
 import ReviewList from './ReviewList';
 import { Product } from "../requests";
 import Spinner from './Spinner'
+import NewReviewForm from './NewReviewForm';
 
 
-class ProductShowPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            product: null
-        };
-        this.deleteReview = this.deleteReview.bind(this);
-    }
-    componentDidMount() {
-        Product.one(this.props.match.params.id).then(product => {
-            this.setState({
-                product: product
-            });
+export default function ProductShowPage(props) {
+    const [product, setProduct] = useState(null);
+    const [review, setReview] = useState({});
+    useEffect(() => {
+        Product.one(props.match.params.id).then(product => {
+            setProduct(product)
         });
+    }, [])
+    const deleteReview = (reviewId) => {
+        setProduct({ ...product, reviews: product.reviews.filter((review) => review.id !== reviewId) })
     }
-    deleteReview(reviewId) {
-        this.setState((state) => {
-            return {
-                product: {
-                    ...state.product,
-                    reviews: state.product.reviews.filter((review) => review.id !== reviewId)
-                }
-            };
-        });
+    const createReview = (e) => {
+        e.preventDefault();
+        setProduct({
+            ...product,
+            reviews: [
+                {
+                    ...review,
+                    id: Math.max(...product.reviews.map((review) => review.id)) + 1
+                },
+                ...product.reviews
+            ]
+        })
     }
-    render() {
-        if (!this.state.product) {
-            return <Spinner />;
-        }
-        return (
+    return (
+        product ?
             <div>
                 <h1>Product</h1>
                 <ProductDetails
-                    {...this.state.product}
+                    {...product}
                 />
-                <ReviewList onReviewDelete={this.deleteReview} reviews={this.state.product.reviews} />
+                <NewReviewForm body={review.body} onChange={setReview} createReview={createReview} />
+                <ReviewList onReviewDelete={deleteReview} reviews={product.reviews} />
             </div>
-        );
-    }
+            : <Spinner />
+    );
 }
-export default ProductShowPage;
